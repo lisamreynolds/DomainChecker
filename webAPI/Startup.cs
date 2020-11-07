@@ -26,6 +26,7 @@ namespace webAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +43,12 @@ namespace webAPI
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSwagger();
+
+            app.UseSwaggerUI(a =>
+            {
+                a.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            });
         }
     }
 }
