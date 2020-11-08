@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace webAPI
 {
@@ -45,9 +38,9 @@ namespace webAPI
             app.UseMvc();
             app.UseSwagger();
 
-            app.UseSwaggerUI(a =>
+            app.UseSwaggerUI(options =>
             {
-                a.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
             });
         }
     }
