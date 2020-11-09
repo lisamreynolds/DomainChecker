@@ -23,14 +23,9 @@ namespace webAPI
             string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             byte[] buffer = Encoding.ASCII.GetBytes(data);
             int timeout = 120; // ms
-            try
-            {
-                PingReply reply = pingSender.Send(endpoint, timeout, buffer, options);
-                return reply.Status == IPStatus.Success ? "success" : "failure";
-            } catch (Exception e)
-            {
-                return "An error occurred: " + e.InnerException.Message;
-            }
+            
+            PingReply reply = pingSender.Send(endpoint, timeout, buffer, options);
+            return reply.Status == IPStatus.Success ? "ping successful" : "ping failed";
         }
     }
 }

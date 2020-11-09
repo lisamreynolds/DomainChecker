@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace webAPI.Controllers
 {
@@ -15,18 +18,21 @@ namespace webAPI.Controllers
             test
         }
 
+        Dictionary<AvailableServices, Func<string, object>> serviceCalls = new Dictionary<AvailableServices, Func<string, object>>()
+        {
+            { AvailableServices.ping, Services.Ping },
+            { AvailableServices.test, endpoint => "test reply" }
+        };
+
         // GET api/aggregate/[ip|domain]?services=[name],&services=[name]
         [HttpGet("{endpoint}")]
-        public ActionResult<string> Get(string endpoint, AvailableServices[] services)
+        public ActionResult<IEnumerable<object>> Get(string endpoint, AvailableServices[] services)
         {
             if (services.Length == 0) services = new AvailableServices[] { AvailableServices.ping };
 
-            string results = "";
-
-            if (Array.Exists(services, s => s.Equals(AvailableServices.ping))) results += Services.Ping(endpoint);
-            if (Array.Exists(services, s => s.Equals(AvailableServices.test))) results += "\n" + "test reply";
-
-            return results;
+            // Consider: .Distinct()
+            return services.Select(service => serviceCalls[service].Invoke(endpoint)).ToList();
         }
+
     }
 }
