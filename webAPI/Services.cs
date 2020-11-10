@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
 
@@ -10,6 +12,8 @@ namespace webAPI
      */
     public class Services
     {
+        static readonly HttpClient client = new HttpClient();
+
         public static string Ping(string endpoint)
         {
             Ping pingSender = new Ping();
@@ -26,6 +30,23 @@ namespace webAPI
             
             PingReply reply = pingSender.Send(endpoint, timeout, buffer, options);
             return reply.Status == IPStatus.Success ? "ping successful" : "ping failed";
+        }
+
+        public static string Geolocation(string endpoint)
+        {
+            string API_KEY = "***REMOVED***";
+            IPAddress address;
+            string type = IPAddress.TryParse(endpoint, out address) ? "ipAddress" : "domain";
+
+            string uri = $"https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey={API_KEY}&{type}={endpoint}";
+            try
+            {
+                return client.GetStringAsync(uri).Result;
+            }
+            catch (HttpRequestException e)
+            {
+                return e.Message;
+            }
         }
     }
 }

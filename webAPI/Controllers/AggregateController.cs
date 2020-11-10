@@ -15,12 +15,14 @@ namespace webAPI.Controllers
         public enum AvailableServices
         {
             ping,
+            geolocation,
             test
         }
 
         Dictionary<AvailableServices, Func<string, object>> serviceCalls = new Dictionary<AvailableServices, Func<string, object>>()
         {
             { AvailableServices.ping, Services.Ping },
+            { AvailableServices.geolocation, Services.Geolocation },
             { AvailableServices.test, endpoint => "test reply" }
         };
 
