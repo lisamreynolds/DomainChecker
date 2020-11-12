@@ -31,8 +31,7 @@ namespace GeoLocationService
         {
             // TODO: api key configuration
             string API_KEY = "***REMOVED***";
-            IPAddress address;
-            string type = IPAddress.TryParse(endpoint, out address) ? "ipAddress" : "domain";
+            string type = IPAddress.TryParse(endpoint, out _) ? "ipAddress" : "domain";
 
             string uri = $"https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey={API_KEY}&{type}={endpoint}";
             try
