@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webAPI", "webAPI\webAPI.csproj", "{428F8F27-FF25-4F97-86CC-61B0EA398AA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "webAPI", "webAPI\webAPI.csproj", "{428F8F27-FF25-4F97-86CC-61B0EA398AA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PingService", "PingService\PingService.csproj", "{DC4D80BC-06E4-4A15-8600-602C23A29128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoLocationService", "GeoLocationService\GeoLocationService.csproj", "{C7F26CCA-FE3C-4A7F-BA5E-227971149E08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{428F8F27-FF25-4F97-86CC-61B0EA398AA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{428F8F27-FF25-4F97-86CC-61B0EA398AA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{428F8F27-FF25-4F97-86CC-61B0EA398AA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4D80BC-06E4-4A15-8600-602C23A29128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4D80BC-06E4-4A15-8600-602C23A29128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4D80BC-06E4-4A15-8600-602C23A29128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4D80BC-06E4-4A15-8600-602C23A29128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F26CCA-FE3C-4A7F-BA5E-227971149E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F26CCA-FE3C-4A7F-BA5E-227971149E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F26CCA-FE3C-4A7F-BA5E-227971149E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F26CCA-FE3C-4A7F-BA5E-227971149E08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

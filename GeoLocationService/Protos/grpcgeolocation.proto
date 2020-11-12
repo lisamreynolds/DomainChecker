@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GeoLocationService";
+
+package grpcgeolocation;
+
+service GRPCGeolocation {
+  rpc UnaryCall (GRPCGeolocationRequest) returns (GRPCGeolocationReply);
+}
+
+message GRPCGeolocationRequest {
+  string endpoint = 1;
+}
+
+message GRPCGeolocationReply {
+  string message = 1;
+}

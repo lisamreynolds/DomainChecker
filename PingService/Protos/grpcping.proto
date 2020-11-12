@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "PingService";
+
+package grpcping;
+
+service GRPCPing {
+  rpc UnaryCall (GRPCPingRequest) returns (GRPCPingReply);
+}
+
+message GRPCPingRequest {
+  string endpoint = 1;
+}
+
+message GRPCPingReply {
+  string message = 1;
+}
