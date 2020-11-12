@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using Grpc.Core;
 using Grpc.Net.Client;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace webAPI.Controllers
 {
@@ -21,15 +23,13 @@ namespace webAPI.Controllers
         public enum AvailableServices
         {
             ping,
-            geolocation,
-            test
+            geolocation
         }
 
-        Dictionary<AvailableServices, Func<string, object>> serviceCalls = new Dictionary<AvailableServices, Func<string, object>>()
+        Dictionary<AvailableServices, Func<string, Task<string>>> serviceCalls = new Dictionary<AvailableServices, Func<string, Task<string>>>()
         {
-            { AvailableServices.ping, Ping },
-            { AvailableServices.geolocation, Geolocation },
-            { AvailableServices.test, endpoint => "test reply" }
+            { AvailableServices.ping, PingAsync },
+            { AvailableServices.geolocation, GeolocationAsync }
         };
 
         // GET api/aggregate/[ip|domain]?services=[name],&services=[name]
@@ -39,25 +39,41 @@ namespace webAPI.Controllers
             if (services.Length == 0) services = new AvailableServices[] { AvailableServices.ping };
 
             // Consider: .Distinct()
-            return services.Select(service => serviceCalls[service].Invoke(endpoint)).ToList();
+            var serviceTasks = services.Select(service => serviceCalls[service].Invoke(endpoint));
+            Task.WhenAll(serviceTasks).Wait();
+            return serviceTasks.Select(task => task.Result).ToList();
         }
 
-        private static string Ping(string endpoint)
+        private static async Task<string> PingAsync(string endpoint)
         {
-            using var channel = GrpcChannel.ForAddress(PING_ADDRESS);
-            var client = new GRPCPing.GRPCPingClient(channel);
-            var reply = client.UnaryCall(new GRPCPingRequest { Endpoint = endpoint });
+            try
+            {
+                using var channel = GrpcChannel.ForAddress(PING_ADDRESS);
+                var client = new GRPCPing.GRPCPingClient(channel);
+                var reply = await client.UnaryCallAsync(new GRPCPingRequest { Endpoint = endpoint }, deadline: DateTime.UtcNow.AddSeconds(5));
 
-            return reply.Message;
+                return reply.Message;
+            }
+            catch (RpcException ex) when (ex.StatusCode == Grpc.Core.StatusCode.DeadlineExceeded)
+            {
+                return "Ping timeout.";
+            }
         }
 
-        private static string Geolocation(string endpoint)
+        private static async Task<string> GeolocationAsync(string endpoint)
         {
-            using var channel = GrpcChannel.ForAddress(GEOLOCATION_ADDRESS);
-            var client = new GRPCGeolocation.GRPCGeolocationClient(channel);
-            var reply = client.UnaryCall(new GRPCGeolocationRequest { Endpoint = endpoint });
+            try
+            {
+                using var channel = GrpcChannel.ForAddress(GEOLOCATION_ADDRESS);
+                var client = new GRPCGeolocation.GRPCGeolocationClient(channel);
+                var reply = await client.UnaryCallAsync(new GRPCGeolocationRequest { Endpoint = endpoint }, deadline: DateTime.UtcNow.AddSeconds(5));
 
-            return reply.Message;
+                return reply.Message;
+            }
+            catch (RpcException ex) when (ex.StatusCode == Grpc.Core.StatusCode.DeadlineExceeded)
+            {
+                return "Geolocation timeout.";
+            }
         }
     }
 }
